@@ -1,5 +1,6 @@
 <?php
-	define("SITENAME", "SimDeliveries");
+	// set this to the name of your website
+	define("SITENAME", "");
 	
 	define("E_USERNAME_EXISTS", 0);
 	define("E_EMAIL_EXISTS", 1);
