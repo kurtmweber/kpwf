@@ -4,6 +4,14 @@
 	require_once("Database.inc.php");
 	require_once("UserClass.inc.php");
 	
+	$VerifyPageHandler = function(){
+		$page = new VerifyPage;
+		
+		return;
+		}
+		
+	$pageHandlers[] = array("verify", $VerifyPageHandler);
+	
 	class VerifyPage extends Page{
 		function __construct(){
 			parent::__construct("Verify");
