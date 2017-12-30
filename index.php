@@ -1,23 +1,23 @@
 <?php
 	require_once("Config.inc.php");
-	require_once("Page.inc.php");
-	require_once("Modules.inc.php");
 	
 	require_once("UserModules.inc.php");
 	
 	date_default_timezone_set("Etc/UTC");
 	
-	if (isset($_GET['register'])){
-		$page = new RegisterPage;
-		} elseif (isset($_GET['verify'])) {
-		$page = new VerifyPage;
-		} elseif (isset($_GET['login'])){
-		$page = new LoginPage;
-		} elseif (isset($_GET['user'])){
-		$page = new UserPage;
-		} elseif (isset($_GET['aircraft'])){
-		$page = new Aircraft;
-		} else {
-		$page = new HomePage;
+	$notYet = true;
+	
+	foreach ($modules as $pageId){
+		if (isset($_GET[$pageId[0]])){
+			$notYet = false;
+			require_once(__DIR__ . "/sitecode/" . $pageId[1]);
+			$page = new $pageId[2];
+			
+			exit();
+			}
+		}
+		
+	if ($notYet){
+		$page = new $pageHandlers['Home'];
 		}
 ?>

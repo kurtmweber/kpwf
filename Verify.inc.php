@@ -3,39 +3,19 @@
 	require_once("Page.inc.php");
 	require_once("Database.inc.php");
 	require_once("UserClass.inc.php");
+	require_once("HtmlElement.inc.php");
 	
-	$VerifyPageHandler = function(){
-		$page = new VerifyPage;
+	class Verification extends Page{
+		protected $Verifying;
 		
-		return;
-		}
-		
-	$pageHandlers[] = array("verify", $VerifyPageHandler);
-	
-	class VerifyPage extends Page{
-		function __construct(){
-			parent::__construct("Verify");
-			$this->LoggedOutNavbar();
+		function __construct($title = "Verify"){
+			parent::__construct($title);
 			
-			$this->Begin();
-			}
-			
-		function Begin(){
 			if (isset($_POST['SubmitVerification'])){
-				try {
-					$this->ProcessVerification();
-					} catch (Exception $e){
-					if ($e->getCode() == E_NO_VER_CODE){
-						$this->TabbedHtmlOut("<P CLASS=\"invalid\">No code exists for that user.</P>");
-						$this->VerificationForm();
-						} else {
-						$this->UnrecoverableError();
-						}
-					}
+				$this->verifying = true;
 				} else {
-				$this->VerificationForm();
+				$this->verifying = false;
 				}
-			return;
 			}
 			
 		function ProcessVerification(){
@@ -43,8 +23,7 @@
 				$user = new User($_POST['userName']);
 				} catch (Exception $e){
 				if ($e->getCode() == E_USER_NO_EXIST){
-					$this->TabbedHtmlOut("<P CLASS=\"invalid\">No such user exists.</P>");
-					$this->VerificationForm();
+					throw $e;
 					return;
 					} else {
 					$this->UnrecoverableError();
@@ -74,10 +53,9 @@
 					} catch (Exception $e){
 					$this->UnrecoverableError();
 					}
-				$this->TabbedHtmlOut("<P>Verification succeeded</P>");
+				return VERIFY_SUCCEEDED;
 				} else {
-				$this->TabbedHtmlOut("<P CLASS=\"invalid\">Invalid code.</P>");
-				$this->VerificationForm();
+				throw new Exception("invalid verification code", E_INVALID_VERIFICATION_CODE);
 				}
 				
 			return;
@@ -103,21 +81,24 @@
 				}
 			}
 			
-		function VerificationForm(){
-?>
-		<FORM ACTION="index.php?verify" METHOD="POST">
-			<LABEL FOR="userName">Username:</LABEL>
-			<INPUT NAME="userName">
-			<LABEL FOR="verificationCode">Verification code:</LABEL>
-			<INPUT NAME="verificationCode">
-			<INPUT TYPE="SUBMIT" NAME="SubmitVerification" VALUE="Submit">
-			<INPUT TYPE="RESET">
-		</FORM>
-<?php
-			}
+		function GetVerificationForm($methodTag){
+			$form = new FormElement("index.php?$methodTag");
+			$usernameLabel = new LabelElement();
+			$usernameLabel->Contents = "Username:";
+			$form->Contents['usernameLabel'] = $usernameLabel;
+			$usernameField = new TextInputElement("userName");
+			$form->Contents['usernameField'] = $usernameField;
+			$verificationCodeLabel = new LabelElement();
+			$verificationCodeLabel->Contents = "Verification code:";
+			$form->Contents['verificationCodeLabel'] = $verificationCodeLabel;
+			$verificationCodeField = new TextInputElement("verificationCode");
+			$form->Contents['verificationCodeField'] = $verificationCodeField;
+			$submitButton = new SubmitButtonElement("SubmitVerification", "Submit");
+			$form->Contents['submitButton'] = $submitButton;
+			$resetButton = new ResetButtonElement();
+			$form->Contents['resetButton'] = $resetButton;
 			
-		function __destruct(){
-			parent::__destruct();
+			return $form;
 			}
 		}
 ?>

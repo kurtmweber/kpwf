@@ -1,27 +1,36 @@
 <?php
 	require_once("Config.inc.php");
-	require_once("Top.inc.php");
-	require_once("Bottom.inc.php");
 	
 	class Page{
 		private $PageTitle;
-		private $TabLevel;
+		public $TabLevel;
 		
 		function __construct($PageTitle){
 			$this->PageTitle = $PageTitle;
 			
-			PageTop($this->PageTitle);
-			
 			$this->TabLevel = 2;
 			}
 			
-		function TabbedHtmlOut($html){
+		function TabbedHtmlOut($html, $newLine = true){
 			for ($i = 0; $i < $this->TabLevel; $i++){
 				printf("\t");
 				}
 				
-			printf("%s\n", $html);
+			printf("%s", $html);
+			if ($newLine){
+				printf("\n");
+				}
 			
+			return;
+			}
+			
+		function HtmlOut($html, $newLine = true){
+			printf("%s", $html);
+			
+			if ($newLine){
+				printf("\n");
+				}
+				
 			return;
 			}
 			
@@ -38,16 +47,8 @@
 			return $input;
 			}
 			
-		function LoggedOutNavbar(){
-?>
-		<NAV>
-			<A HREF="index.php" CLASS="navbar-link">[home]</A> | <A HREF="index.php?news" CLASS="navbar-link">[news]</A> | <A HREF="index.php?register" CLASS="navbar-link">[register]</A> | <A HREF="index.php?login" CLASS="navbar-link">[log in]</A>
-		</NAV>
-<?php
-			}
-			
 		function __destruct(){
-			PageBottom();
+			//PageBottom();
 			}
 		}
 ?>
