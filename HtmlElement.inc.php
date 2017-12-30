@@ -5,6 +5,7 @@
 		protected $element;
 		protected $htmlClass;
 		protected $htmlId;
+		protected $style;
 		public $Contents;
 	
 		protected function Element(){
@@ -16,7 +17,7 @@
 				}
 			}
 			
-		public function HtmlClass(){
+		public function ClassAttr(){
 			if (func_num_args() == 1){
 				$this->htmlClass = func_get_arg(0);
 				return;
@@ -25,7 +26,7 @@
 				}
 			}
 			
-		public function HtmlId(){
+		public function Id(){
 			if (func_num_args() == 1){
 				$this->htmlId = func_get_arg(0);
 				return;
@@ -34,15 +35,29 @@
 				}
 			}
 			
-		protected function ClassIdString(){
+		public function Style(){
+			if (func_num_args() == 1){
+				$this->style = func_get_arg(0);
+				return;
+				} else {
+				return $this->style;
+				}
+			}
+			
+			
+		protected function CommonAttrString(){
 			$htmlCode = "";
 			
-			if ($this->HtmlId()){
-				$htmlCode .= " ID=\"" . $this->HtmlId() . "\"";
+			if ($this->Id()){
+				$htmlCode .= " ID=\"" . $this->Id() . "\"";
 				}
 			
-			if ($this->HtmlClass()){
-				$htmlCode .= " CLASS=\"" . $this->HtmlClass() . "\"";
+			if ($this->ClassAttr()){
+				$htmlCode .= " CLASS=\"" . $this->ClassAttr() . "\"";
+				}
+				
+			if ($this->Style()){
+				$htmlCode .= " STYLE=\"" . $this->Style() . "\"";
 				}
 
 			return $htmlCode;
@@ -88,7 +103,7 @@
 			$htmlCode = "<" . $this->Element();
 			$htmlCode .= " ACTION=\"" . $this->Action() . "\"";
 			$htmlCode .= " METHOD=\"" . $this->Method() . "\"";
-			$htmlCode .= $this->ClassIdString();
+			$htmlCode .= $this->CommonAttrString();
 			$htmlCode .= ">";
 			
 			return $htmlCode;
@@ -159,7 +174,7 @@
 				$htmlCode .= " VALUE=\"" . $this->InputValue() . "\"";
 				}
 				
-			$htmlCode .= $this->ClassIdString();
+			$htmlCode .= $this->CommonAttrString();
 			$htmlCode .= ">";
 			
 			return $htmlCode;
@@ -287,7 +302,7 @@
 				$htmlCode.= " FOR=\"" . $this->FieldFor() . "\"";
 				}
 				
-			$htmlCode .= $this->ClassIdString();
+			$htmlCode .= $this->CommonAttrString();
 				
 			$htmlCode .= ">";
 			
