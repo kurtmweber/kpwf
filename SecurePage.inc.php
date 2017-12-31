@@ -8,16 +8,32 @@
 		
 		function __construct($pageTitle){
 			parent::__construct($pageTitle);
+			
+			$this->user = $this->GetUser();
 			}
 			
 		function GetUser(){
+			global $confAdminApprovalRequired;
+			
 			static $user;
 			
 			if (func_num_args() == 2){
 				$user = new User(func_get_arg(0));
 				$authenticated = $user->Authenticate(func_get_arg(1));
-				if ($authenticated){
-					return $user;
+				switch($authenticated){
+					case LOGIN_SUCCEEDED:
+						return $user;
+					case LOGIN_FAILED_PASSWORD:
+						throw new Exception("Incorrect password", LOGIN_FAILED_PASSWORD);
+						break;
+					case LOGIN_FAILED_NOT_VERIFIED:
+						throw new Exception("Not verified", LOGIN_FAILED_NOT_VERIFIED);
+						break;
+					case LOGIN_FAILED_NOT_APPROVED:
+						if ($confAdminApprovalRequired){
+							throw new Exception("Administrator approval required", LOGIN_FAILED_NOT_APPROVED);
+							}
+						break;
 					}
 				} else {
 				if (!isset($_COOKIE[SITENAME . "User"])){

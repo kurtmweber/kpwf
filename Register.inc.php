@@ -6,6 +6,11 @@
 	require_once("HtmlElement.inc.php");
 	
 	class Registration extends SecurePage{
+		function __construct($title){
+			parent::__construct($title);
+			
+			return;
+			}
 	
 		protected function GetRegistrationForm($methodTag){
 			$form = new FormElement("index.php?$methodTag");
@@ -116,7 +121,7 @@
 			$tmpDay->Contents = "8";
 			$birthDateField->Contents[] = clone $tmpDay;
 			$tmpDay = new OptionElement("09");
-			$tmpDay->Contents = "8";
+			$tmpDay->Contents = "9";
 			$birthDateField->Contents[] = clone $tmpDay;
 			$tmpDay = new OptionElement("10");
 			$tmpDay->Contents = "10";

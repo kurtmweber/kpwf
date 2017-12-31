@@ -2,7 +2,7 @@
 	require_once("Config.inc.php");
 	require_once("Database.inc.php");
 	
-	class User{
+	class User{		
 		private $userName = false;
 		private $email = false;
 		private $admin = null;
@@ -40,13 +40,15 @@
 			}
 			
 		function Authenticate($password){
+			global $confAdminApprovalRequired;
+			
 			$conn = GetDatabaseConn();
 			
 			$stmt = $conn->stmt_init();
-			if ($stmt->prepare("SELECT passwordHash FROM users WHERE id = ?")){
+			if ($stmt->prepare("SELECT passwordHash, approved, verified FROM users WHERE id = ?")){
 				$stmt->bind_param("i", $this->userId);
 				$stmt->execute();
-				$stmt->bind_result($passwordHash);
+				$stmt->bind_result($passwordHash, $approved, $verified);
 				if (!$stmt->fetch()){
 					throw new Exception("invalid user", E_USER_NO_EXIST);
 					}
@@ -54,11 +56,19 @@
 				throw new Exception("prepared statement failed", E_PREPARED_STMT_UNRECOV);
 				}
 			
-			if (password_verify($password, $passwordHash)){
-				return true;
-				} else {
-				return false;
+			if (!password_verify($password, $passwordHash)){
+				return LOGIN_FAILED_PASSWORD;
 				}
+				
+			if (!$verified){
+				return LOGIN_FAILED_NOT_VERIFIED;
+				}
+				
+			if (!$approved && $confAdminApprovalRequired){
+				return LOGIN_FAILED_NOT_APPROVED;
+				}
+				
+			return LOGIN_SUCCEEDED;
 			}
 			
 		function IsAdmin(){

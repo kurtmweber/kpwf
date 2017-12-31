@@ -35,7 +35,8 @@
 			}
 			
 		function UnrecoverableError(){
-			$this->TabbedHtmlOut("<P CLASS=\"invalid\">Unrecoverable error, exiting</P>");
+			$this->TabbedHtmlOut("<P>Unrecoverable error, exiting</P>");
+			ob_end_flush();
 			exit();
 			}
 			
