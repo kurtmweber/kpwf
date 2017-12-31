@@ -2,6 +2,7 @@
 	require_once("Config.inc.php");
 	require_once("Modules.inc.php");
 	require_once("UserClass.inc.php");
+	require_once("Utility.inc.php");
 	
 	class SecurePage extends Page{
 		protected $user;
@@ -36,15 +37,15 @@
 						break;
 					}
 				} else {
-				if (!isset($_COOKIE[SITENAME . "User"])){
+				if (!isset($_COOKIE[Cookieify(SITENAME . "User")])){
 					return false;
 					}
 					
-				if (!isset($_COOKIE[SITENAME . "Session"])){
+				if (!isset($_COOKIE[Cookieify(SITENAME . "Session")])){
 					return false;
 					}
-				$userName = $_COOKIE[SITENAME . "User"];
-				$sessionCode = $_COOKIE[SITENAME . "Session"];
+				$userName = $_COOKIE[Cookieify(SITENAME . "User")];
+				$sessionCode = $_COOKIE[Cookieify(SITENAME . "Session")];
 				
 				$user = new User($userName);
 				

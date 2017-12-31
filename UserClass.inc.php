@@ -1,6 +1,7 @@
 <?php
 	require_once("Config.inc.php");
 	require_once("Database.inc.php");
+	require_once("Utility.inc.php");
 	
 	class User{		
 		private $userName = false;
@@ -205,6 +206,11 @@
 				}
 				
 			return $sessionCode;
+			}
+			
+		function EndSession(){
+			setcookie(Cookieify(SITENAME . "Session"), "", time() - 3600);
+			setcookie(Cookieify(SITENAME . "User"), "", time() - 3600);
 			}
 			
 		function GetUserName(){

@@ -4,6 +4,7 @@
 	require_once("Database.inc.php");
 	require_once("UserClass.inc.php");
 	require_once("HtmlElement.inc.php");
+	require_once("Utility.inc.php");
 	
 	class Login extends SecurePage{
 		function __construct($title){
@@ -43,8 +44,8 @@
 			}
 			
 		protected function SendSessionCookie($sessionCode){
-			setcookie(SITENAME . "Session", $sessionCode, time() + (365*24*60*60));
-			setcookie(SITENAME . "User", $this->user->GetUserName(), time() + (365*24*60*60));
+			setcookie(Cookieify(SITENAME . "Session"), $sessionCode, time() + (365*24*60*60));
+			setcookie(Cookieify(SITENAME . "User"), $this->user->GetUserName(), time() + (365*24*60*60));
 			
 			return;
 			}
