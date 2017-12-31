@@ -227,6 +227,29 @@
 			}
 		}
 		
+	class PasswordInputElement extends InputElement{
+		function __construct(){
+			$numArgs = func_num_args();
+			
+			switch($numArgs){
+				case 0:
+					parent::__construct("PASSWORD");
+					break;
+				case 1:
+					parent::__construct("PASSWORD", func_get_arg(0));
+					break;
+				case 2:
+					parent::__construct("PASSWORD", func_get_arg(0), func_get_arg(1));
+					break;
+				default:
+					throw new Exception(E_TOO_MANY_ARGS, "too many arguments");
+					break;
+				}
+			
+			return;
+			}
+		}
+		
 	class SubmitButtonElement extends InputElement{
 		function __construct(){
 			$numArgs = func_num_args();
@@ -270,6 +293,89 @@
 				}
 			
 			return;
+			}
+		}
+		
+	class SelectElement extends HtmlElement{
+		protected $selectName;
+		
+		function __construct(){
+			$this->Element("SELECT");
+			
+			$numArgs = func_num_args();
+			
+			switch($numArgs){
+				case 0:
+					break;
+				case 1:
+					$this->SelectName(func_get_arg(0));
+					break;
+				default:
+					throw new Exception(E_TOO_MANY_ARGS, "too many arguments");
+					break;
+				}
+			}
+			
+		public function SelectName(){
+			if (func_num_args() == 1){
+				$this->selectName = func_get_arg(0);
+				return;
+				} else {
+				return $this->selectName;
+				}
+			}
+			
+		public function GenerateHtml(){
+			$htmlCode = "<" . $this->Element();
+			if ($this->SelectName()){
+				$htmlCode .= " NAME=\"" . $this->SelectName() . "\"";
+				}
+				
+			$htmlCode .= $this->CommonAttrString();
+			$htmlCode .= ">";
+			return $htmlCode;
+			}
+		}
+		
+	class OptionElement extends HtmlElement{
+		protected $OptionValue;
+		
+		function __construct(){
+			$this->Element("OPTION");
+			$numArgs = func_num_args();
+			
+			switch ($numArgs){
+				case 0:
+					break;
+				case 1:
+					$this->OptionValue(func_get_arg(0));
+					break;
+				default:
+					throw new Exception(E_TOO_MANY_ARGS, "too many arguments");
+					break;
+				}
+				
+			return;
+			}
+			
+		public function OptionValue(){
+			if (func_num_args() == 1){
+				$this->OptionValue = func_get_arg(0);
+				return;
+				} else {
+				return $this->OptionValue;
+				}
+			}
+			
+		public function GenerateHtml(){
+			$htmlCode = "<" . $this->Element();
+			if ($this->OptionValue()){
+				$htmlCode .= " VALUE=\"" . $this->OptionValue() . "\"";
+				}
+				
+			$htmlCode .= $this->CommonAttrString();
+			$htmlCode .= ">";
+			return $htmlCode;
 			}
 		}
 		

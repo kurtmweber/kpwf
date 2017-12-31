@@ -10,10 +10,12 @@
 	define("E_NO_VER_CODE", 5);
 	define("E_TOO_MANY_ARGS", 6);
 	define("E_INVALID_VERIFICATION_CODE", 7);
+	define("REGISTRATION_SUCCEEDED", 8);
+	define("VERIFY_SUCCEEDED", 9);
+	define("VERIFY_FAILED_INVALID_CODE", 10);
+	
+	
 	
 	define("SQL_ERROR_DUP_ENTRY", 1062);
 	define("SQL_ERROR_DUP_ENTRY_KEYNAME", 1586);
-	
-	define("VERIFY_SUCCEEDED", 0);
-	define("VERIFY_FAILED_INVALID_CODE", 1);
 ?>

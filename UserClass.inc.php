@@ -338,7 +338,7 @@
 				throw new Exception("prepared statement failed", E_PREPARED_STMT_UNRECOV);
 				}
 				
-			mail($email, "SimDeliveries Email Verification", $verify, "From: kmw@outwardhosting.com");
+			mail($email, SITENAME . " Email Verification", $verify, "From: kmw@outwardhosting.com");
 				
 			return;
 			}
